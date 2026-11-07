@@ -1,0 +1,12 @@
+# Design handoff export (source material, not part of the site)
+Retro 2013 Portfolio Page-handoff/
+*.zip
+
+# Windows download metadata created under WSL
+*:Zone.Identifier
+*:SmartScreen
+
+# OS / editor clutter
+.DS_Store
+Thumbs.db
+.vscode/
