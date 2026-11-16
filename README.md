@@ -53,14 +53,7 @@ The post, in normal markdown: headings, lists, tables, code blocks, images and `
 npm run build      # writes the static site to out/
 ```
 
-`out/` is plain HTML, CSS and JS. Serve it with any static web server, for example Caddy:
-
-```caddyfile
-yourdomain.me {
-	root * /var/www/rukySite/out
-	file_server
-}
-```
+`out/` is plain HTML, CSS and JS. Pushes to `main` are built and deployed by GitHub Actions to an Oracle Cloud VM running Caddy. Setup, deploys, rollbacks and troubleshooting are in the [runbook](docs/runbook.md).
 
 To preview the build locally: `python3 -m http.server 4173 --directory out`, then open http://localhost:4173.
 
@@ -72,4 +65,6 @@ content/      blog posts (markdown)
 components/   one file per section, plus the player, theme toggle and photo frame
 lib/          site content, post loader, the Web Audio sound engine, theme and media-query helpers
 public/       static files (images)
+infra/        server setup script and Caddy configuration
+docs/         runbook for hosting and deploys
 ```
