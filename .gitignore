@@ -2,6 +2,9 @@
 Retro 2013 Portfolio Page-handoff/
 *.zip
 
+# Original photos (full size, with location data). The web copies live in public/images/.
+Pictures/
+
 # Windows download metadata created under WSL
 *:Zone.Identifier
 *:SmartScreen
