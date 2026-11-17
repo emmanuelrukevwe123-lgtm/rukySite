@@ -227,23 +227,21 @@ section[id] { scroll-margin-top: 68px; }
   cursor: pointer;
   transition: border-color 0.4s ease, background 0.4s ease;
 }
-.theme-toggle svg { width: 17px; height: 17px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
-.theme-toggle .icon-sun { display: none; }
-[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
-[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
+.theme-toggle svg { width: 17px; height: 17px; fill: currentColor; }
 
 .menu-btn {
   display: none;
-  font-size: 14px;
-  font-weight: 400;
-  line-height: 1;
-  padding: 10px 14px;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
   border: 1px solid var(--line);
-  border-radius: 999px;
+  border-radius: 50%;
   background: transparent;
   color: var(--fg);
   cursor: pointer;
 }
+.menu-btn svg { width: 17px; height: 17px; fill: currentColor; }
 .mobile-menu { display: none; }
 
 /* ---------- Hero ---------- */
@@ -506,7 +504,7 @@ section[id] { scroll-margin-top: 68px; }
   border: 1px solid color-mix(in srgb, currentColor 45%, transparent);
   background: color-mix(in srgb, currentColor 8%, transparent);
 }
-.project-symbol svg { width: 20px; height: 20px; stroke-width: 1.5; }
+.project-symbol svg { width: 18px; height: 18px; }
 /* …or, with no screenshot, the artwork itself. */
 .project-symbol.is-large {
   position: static;
@@ -515,7 +513,7 @@ section[id] { scroll-margin-top: 68px; }
   aspect-ratio: 1;
   border-color: color-mix(in srgb, currentColor 28%, transparent);
 }
-.project-symbol.is-large svg { width: 46%; height: 46%; stroke-width: 0.8; }
+.project-symbol.is-large svg { width: 40%; height: 40%; }
 .project-kind { left: 22px; }
 .project-year { right: 22px; }
 .project h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.3px; font-size: clamp(22px, 1.8vw, 32px); line-height: 1.2; margin: 22px 0 0; }
@@ -634,6 +632,10 @@ html:not(.js) .piece { opacity: 1; transform: rotate(var(--r)); }
 .sky-about { grid-area: about; }
 .sky-intro { margin: 18px 0 0; max-width: 36ch; color: var(--muted); }
 .sky-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.sky-picker .cat { display: inline-flex; align-items: center; gap: 7px; padding-left: 11px; }
+.cat-icon { width: 18px; height: 18px; flex: none; }
+.cat-icon line { stroke: currentColor; stroke-width: 1.3; stroke-linecap: round; opacity: 0.7; }
+.cat-icon circle { fill: currentColor; }
 .sky-about { padding-top: 24px; border-top: 1px solid var(--line); max-width: 46ch; }
 .sky-about h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(22px, 1.8vw, 30px); line-height: 1.2; letter-spacing: -0.3px; }
 .sky-about p { margin: 10px 0 0; font-size: 15px; color: var(--muted); text-wrap: pretty; }
@@ -1105,7 +1107,7 @@ html.js .hand-arrow { --line: 0; --head: 0; }
 @media (max-width: 720px) {
   .nav-links { display: none; }
   .nav-right { gap: 10px; }
-  .menu-btn { display: inline-block; }
+  .menu-btn { display: grid; }
   .mobile-menu:not([hidden]) {
     display: flex;
     flex-direction: column;

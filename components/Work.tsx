@@ -97,7 +97,7 @@ export function Work() {
                 )}
                 {/* Small badge beside a screenshot; the main artwork when there is none. */}
                 <span className={p.screenshot?.src ? "project-symbol" : "project-symbol is-large"} aria-hidden="true">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
                     <path d={p.symbol} />
                   </svg>
                 </span>

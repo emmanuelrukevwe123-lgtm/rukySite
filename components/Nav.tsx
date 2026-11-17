@@ -74,9 +74,18 @@ export function Nav() {
             className="menu-btn"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Menu"}
+            title={menuOpen ? "Close menu" : "Menu"}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            {menuOpen ? "Close" : "Menu"}
+            {/* Filled, rounded bars to match the other icons (Flaticon UIcons style). */}
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {menuOpen ? (
+                <path d="M18.71 5.29a1 1 0 0 0-1.42 0L12 10.59 6.71 5.29a1 1 0 0 0-1.42 1.42L10.59 12l-5.3 5.29a1 1 0 1 0 1.42 1.42L12 13.41l5.29 5.3a1 1 0 0 0 1.42-1.42L13.41 12l5.3-5.29a1 1 0 0 0 0-1.42Z" />
+              ) : (
+                <path d="M3 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 6h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 6h12a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Z" />
+              )}
+            </svg>
           </button>
         </div>
       </div>

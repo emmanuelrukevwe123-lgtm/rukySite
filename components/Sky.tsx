@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useSyncExternalStore } from "react";
-import { constellations, fieldStars, moonLitPath, moonPhase } from "@/lib/sky";
+import { constellationIcon, constellations, fieldStars, moonLitPath, moonPhase } from "@/lib/sky";
 
 const MOON = { cx: 338, cy: 64, r: 27 };
 
@@ -35,6 +35,7 @@ export function Sky() {
                 aria-pressed={i === selected}
                 onClick={() => setSelected(i)}
               >
+                <ConstellationIcon c={c} />
                 {c.name}
               </button>
             ))}
@@ -94,5 +95,19 @@ export function Sky() {
         </div>
       </div>
     </section>
+  );
+}
+
+function ConstellationIcon({ c }: { c: (typeof constellations)[number] }) {
+  const icon = constellationIcon(c);
+  return (
+    <svg className="cat-icon" viewBox="0 0 24 24" aria-hidden="true">
+      {icon.lines.map((l, i) => (
+        <line key={i} {...l} />
+      ))}
+      {icon.stars.map((s, i) => (
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} />
+      ))}
+    </svg>
   );
 }

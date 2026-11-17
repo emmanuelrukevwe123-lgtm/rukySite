@@ -160,6 +160,29 @@ function project(c: RawConstellation): Constellation {
 
 export const constellations: Constellation[] = RAW.map(project);
 
+/** The same figure shrunk onto a 24×24 grid, for the small icon on each picker button. */
+export function constellationIcon(c: Constellation) {
+  const xs = c.stars.map((s) => s.x);
+  const ys = c.stars.map((s) => s.y);
+  const [minX, minY] = [Math.min(...xs), Math.min(...ys)];
+  const [w, h] = [Math.max(...xs) - minX, Math.max(...ys) - minY];
+  const size = 19;
+  const scale = size / Math.max(w, h);
+  const offX = (24 - w * scale) / 2;
+  const offY = (24 - h * scale) / 2;
+  const round = (n: number) => Math.round(n * 100) / 100;
+  const at = (x: number, y: number) => ({ x: round(offX + (x - minX) * scale), y: round(offY + (y - minY) * scale) });
+  return {
+    // Brighter stars stay a little larger, as on the chart.
+    stars: c.stars.map((s) => ({ ...at(s.x, s.y), r: round(0.9 + (s.r - 1.5) * 0.25) })),
+    lines: c.lines.map((l) => {
+      const a = at(l.x1, l.y1);
+      const b = at(l.x2, l.y2);
+      return { x1: a.x, y1: a.y, x2: b.x, y2: b.y };
+    }),
+  };
+}
+
 /** Faint background stars: the same scatter every time, so the page never shifts between visits. */
 export const fieldStars: { x: number; y: number; r: number; o: number }[] = (() => {
   let seed = 20261117;
