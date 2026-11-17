@@ -479,6 +479,8 @@ section[id] { scroll-margin-top: 68px; }
   box-shadow: 0 24px 48px -20px rgba(0,0,0,0.45);
   background: rgba(255,255,255,0.4);
   color: var(--ink-fixed);
+  /* Keeps the rounded corners clipping the image while the row scrolls (Safari on iPhone). */
+  isolation: isolate;
 }
 .project-shot::after {
   content: "";
@@ -846,6 +848,8 @@ html.js .hand-arrow { --line: 0; --head: 0; }
   inset: 0;
   width: 100vw;
   height: 100vh;
+  /* On phones 100vh is taller than the visible screen, which pushes the buttons under the browser's toolbar. */
+  height: 100dvh;
   max-width: none;
   max-height: none;
   margin: 0;
@@ -857,7 +861,7 @@ html.js .hand-arrow { --line: 0; --head: 0; }
 .lightbox[open] { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 22px; animation: fade 0.4s ease; }
 .lightbox::backdrop { background: rgba(22,30,25,0.94); }
 .lightbox-figure { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-.lightbox-frame { position: relative; width: min(92vw, 1100px); height: 74vh; }
+.lightbox-frame { position: relative; width: min(92vw, 1100px); height: 74vh; height: 74dvh; }
 .lightbox-frame img { object-fit: contain; }
 .lightbox-figure figcaption { font-size: 15px; color: #c9d1cb; text-align: center; }
 .lightbox-figure figcaption:empty { display: none; }
