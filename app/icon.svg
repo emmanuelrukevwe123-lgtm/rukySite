@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- The record from the home page's turntable, on the site's sage green. -->
+  <rect width="64" height="64" rx="14" fill="#7c9a85"/>
+  <circle cx="32" cy="32" r="23" fill="#161a17"/>
+  <circle cx="32" cy="32" r="16.5" fill="none" stroke="#2c332e" stroke-width="1.2"/>
+  <circle cx="32" cy="32" r="9" fill="#fafaf8"/>
+  <circle cx="32" cy="32" r="2.2" fill="#7c9a85"/>
+</svg>

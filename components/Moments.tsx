@@ -62,7 +62,6 @@ export function Moments() {
             <h2 className="h2-md">Photographs &amp; media</h2>
             <HandArrow shape="short" className="section-arrow arrow-md" />
           </div>
-          <p className="moments-intro">Stills and frames from behind the camera.</p>
         </div>
 
         <div className="moments-body">

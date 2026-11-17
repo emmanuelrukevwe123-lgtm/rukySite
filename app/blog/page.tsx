@@ -6,6 +6,7 @@ import { site } from "@/lib/content";
 export const metadata: Metadata = {
   title: `Blog — ${site.fullName}`,
   description: "Write-ups from my security and cloud labs: what I built, what broke, and how I found out.",
+  alternates: { canonical: "/blog/" },
 };
 
 export default function BlogIndex() {

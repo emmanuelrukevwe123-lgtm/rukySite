@@ -1,0 +1,57 @@
+# Caddy configuration for the site.
+# setup.sh copies this to /etc/caddy/Caddyfile and replaces the two placeholders:
+#   SITE_DOMAIN  the bare domain, for example manuelruky.me
+#   ACME_EMAIL   address Let's Encrypt uses for certificate expiry notices
+
+{
+	email ACME_EMAIL
+}
+
+SITE_DOMAIN {
+	# `current` is a symlink to the newest release; the deploy job repoints it.
+	root * /var/www/rukysite/current
+
+	encode zstd gzip
+
+	header {
+		# Only ever load this site over HTTPS (one year).
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		# Everything is served from this origin. Inline scripts and styles are
+		# allowed because the Next.js export and the theme script rely on them.
+		Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=(), interest-cohort=()"
+		-Server
+	}
+
+	# Next.js puts a content hash in these file names, so they can be cached forever.
+	@hashed path /_next/static/*
+	header @hashed Cache-Control "public, max-age=31536000, immutable"
+
+	# Pages must be revalidated so a deploy shows up straight away.
+	@pages path / *.html *.txt */
+	header @pages Cache-Control "no-cache"
+
+	file_server
+
+	# Serve the site's own 404 page, keeping the 404 status.
+	handle_errors 404 {
+		root * /var/www/rukysite/current
+		rewrite * /404.html
+		file_server
+	}
+
+	log {
+		output file /var/log/caddy/access.log {
+			roll_size 10MiB
+			roll_keep 5
+		}
+		format json
+	}
+}
+
+www.SITE_DOMAIN {
+	redir https://SITE_DOMAIN{uri} permanent
+}

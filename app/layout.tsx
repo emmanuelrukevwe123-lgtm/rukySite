@@ -11,8 +11,18 @@ const lora = Lora({ subsets: ["latin"], variable: "--font-lora" });
 const hanken = Hanken_Grotesk({ subsets: ["latin"], weight: ["300", "400", "500"], variable: "--font-hanken" });
 
 export const metadata: Metadata = {
+  // Lets link previews and canonical links use full https://… addresses.
+  metadataBase: new URL(site.url),
   title: site.title,
   description: site.description,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: site.name,
+    title: site.title,
+    description: site.description,
+    url: "/",
+  },
 };
 
 export const viewport: Viewport = {

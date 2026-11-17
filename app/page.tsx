@@ -3,6 +3,7 @@ import { Contact } from "@/components/Contact";
 import { Journal } from "@/components/Journal";
 import { Moments } from "@/components/Moments";
 import { PlayerProvider } from "@/components/PlayerProvider";
+import { Sky } from "@/components/Sky";
 import { ScrollArrows } from "@/components/ScrollArrows";
 import { MiniPlayer, Turntable } from "@/components/Turntable";
 import { Work } from "@/components/Work";
@@ -18,9 +19,10 @@ export default function Home() {
             <div className="hero-copy">
               <h1>Building Carefully &amp; Securely</h1>
               <p>
-                I’m {site.fullName}. I work across cybersecurity, cloud and DevSecOps: I build infrastructure and
-                pipelines with security in from the first commit, then attack and monitor them in my own labs. Off
-                the keyboard, I play saxophone and make films.
+                Hi, I’m {site.fullName}. I find the cloud fascinating, and securing it even more so. I spend most
+                of my time building systems that run safely, ship safely and keep their servers protected. Off the
+                keyboard, I make music and films, play saxophone and soccer, and on clear nights you’ll find me
+                stargazing.
               </p>
               <div className="hero-actions">
                 <a href="#work" className="btn-pill">
@@ -36,6 +38,7 @@ export default function Home() {
         </section>
         <Work />
         <Moments />
+        <Sky />
         <Journal posts={getAllPosts()} />
         <Contact />
       </main>
