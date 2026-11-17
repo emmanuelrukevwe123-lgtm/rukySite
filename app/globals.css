@@ -542,7 +542,6 @@ section[id] { scroll-margin-top: 68px; }
 .moments-inner { padding: var(--section-y) 0; }
 .moments-head { margin-bottom: clamp(40px, 4.6vw, 92px); }
 .moments-body { display: grid; gap: clamp(28px, 3vw, 48px); }
-.moments-intro { max-width: 340px; margin: 0; color: var(--night-muted); font-size: 15px; }
 
 .collage {
   width: 100%;
@@ -618,6 +617,70 @@ html:not(.js) .piece { opacity: 1; transform: rotate(var(--r)); }
   .moments-body { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); }
   .collage { max-width: none; }
   .moments-grid { aspect-ratio: auto; }
+}
+
+/* ---------- Sky ----------
+   A window onto the night, set into the page like the project cards.
+   It holds still: the only movement is the figure drawing itself when one is picked. */
+/* On a phone the chart sits right under the picker, so a pick is seen at once. */
+.sky-inner {
+  padding: var(--section-y) 0;
+  display: grid;
+  gap: 28px;
+  grid-template-areas: "head" "chart" "about";
+}
+.sky-head { grid-area: head; }
+.sky-chart { grid-area: chart; }
+.sky-about { grid-area: about; }
+.sky-intro { margin: 18px 0 0; max-width: 36ch; color: var(--muted); }
+.sky-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 28px; }
+.sky-about { padding-top: 24px; border-top: 1px solid var(--line); max-width: 46ch; }
+.sky-about h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: clamp(22px, 1.8vw, 30px); line-height: 1.2; letter-spacing: -0.3px; }
+.sky-about p { margin: 10px 0 0; font-size: 15px; color: var(--muted); text-wrap: pretty; }
+.sky-about .sky-figure { margin-top: 4px; color: var(--accent-text); }
+.sky-about .sky-season { font-size: 13px; color: var(--faint); }
+
+.sky-chart { margin: 0; }
+.sky-chart svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  /* Night falling toward the horizon: deep forest above, a little warmth below. */
+  background:
+    radial-gradient(120% 70% at 50% 118%, rgba(124,154,133,0.38), transparent 62%),
+    linear-gradient(180deg, #0c110e 0%, #141d17 55%, #1e2c23 100%);
+  box-shadow: 0 30px 60px -34px rgba(0,0,0,0.55);
+}
+[data-theme="dark"] .sky-chart svg { outline: 1px solid var(--line); outline-offset: -1px; }
+.sky-chart figcaption { margin-top: 14px; font-size: 14px; color: var(--muted); min-height: 1.6em; }
+
+.sky-chart .moon-dark { fill: #f4f1e6; opacity: 0.09; }
+.sky-chart .moon-lit { fill: #f4f1e6; }
+.sky-chart .star { fill: #fbfaf4; }
+.sky-chart .star-halo { fill: #fbfaf4; opacity: 0.1; }
+.sky-chart text { font-family: var(--body); font-size: 10px; letter-spacing: 0.02em; fill: #b9c4bb; }
+.sky-chart .figure line {
+  stroke: #9fbba7;
+  stroke-width: 0.9;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: sky-trace 0.5s var(--ease) forwards;
+  animation-delay: calc(var(--i) * 90ms + 120ms);
+}
+@keyframes sky-trace { to { stroke-dashoffset: 0; } }
+
+@media (min-width: 900px) {
+  .sky-inner {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    grid-template-areas: "head chart" "about chart";
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(40px, 5vw, 96px);
+    row-gap: 32px;
+  }
+  .sky-head { align-self: end; }
+  .sky-chart { align-self: center; }
 }
 
 /* ---------- Journal ---------- */
@@ -1101,6 +1164,7 @@ html.js .hand-arrow { --line: 0; --head: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .sky-chart .figure line { animation: none; stroke-dashoffset: 0; }
   html { scroll-behavior: auto; }
   .hero-ring, .piece-inner, .mini-disc, .is-playing .brand-dot, .mobile-menu:not([hidden]) { animation: none; }
   .collage-stage.play-a .piece,

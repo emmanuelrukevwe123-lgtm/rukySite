@@ -65,7 +65,7 @@ export function Work() {
         <div className="section-head work-head">
           <div className="arrow-host">
             <h2 className="h2-xl">Selected projects</h2>
-            <p className="work-intro">A handful of things I’ve built recently — each one made slowly, with care.</p>
+            <p className="work-intro">A handful of things I’ve built recently.</p>
             <HandArrow shape="long" className="section-arrow arrow-xl" />
           </div>
           <div className="pager">
