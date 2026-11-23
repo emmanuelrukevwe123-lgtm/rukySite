@@ -28,3 +28,6 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Assignment screenshots (personal, not part of the site)
+Assignment/
