@@ -1,0 +1,86 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/theme.json",
+	"version": 3,
+	"settings": {
+		"color": {
+			"palette": [
+				{ "name": "Paper", "slug": "base", "color": "#fafaf8" },
+				{ "name": "Ink", "slug": "contrast", "color": "#1b221d" },
+				{ "name": "Sage", "slug": "accent-1", "color": "#7c9a85" },
+				{ "name": "Mist", "slug": "accent-2", "color": "#e3e7e1" },
+				{ "name": "Deep sage", "slug": "accent-3", "color": "#4f6e59" },
+				{ "name": "Stone", "slug": "accent-4", "color": "#5f6862" },
+				{ "name": "Shell", "slug": "accent-5", "color": "#f1f1ee" },
+				{ "name": "Line", "slug": "accent-6", "color": "#e3e7e1" },
+				{ "name": "Night", "slug": "night", "color": "#1e2922" }
+			]
+		},
+		"typography": {
+			"fontFamilies": [
+				{
+					"name": "Lora",
+					"slug": "lora",
+					"fontFamily": "Lora, Georgia, serif",
+					"fontFace": [
+						{ "fontFamily": "Lora", "fontStyle": "normal", "fontWeight": "400 700", "src": [ "file:./assets/fonts/lora.woff2" ] },
+						{ "fontFamily": "Lora", "fontStyle": "italic", "fontWeight": "400 700", "src": [ "file:./assets/fonts/lora-italic.woff2" ] }
+					]
+				},
+				{
+					"name": "Hanken Grotesk",
+					"slug": "hanken-grotesk",
+					"fontFamily": "\"Hanken Grotesk\", system-ui, sans-serif",
+					"fontFace": [
+						{ "fontFamily": "Hanken Grotesk", "fontStyle": "normal", "fontWeight": "100 900", "src": [ "file:./assets/fonts/hanken-grotesk.woff2" ] }
+					]
+				},
+				{
+					"name": "JetBrains Mono",
+					"slug": "jetbrains-mono",
+					"fontFamily": "\"JetBrains Mono\", ui-monospace, monospace",
+					"fontFace": [
+						{ "fontFamily": "JetBrains Mono", "fontStyle": "normal", "fontWeight": "100 800", "src": [ "file:./assets/fonts/jetbrains-mono.woff2" ] }
+					]
+				}
+			]
+		}
+	},
+	"styles": {
+		"color": {
+			"background": "var:preset|color|base",
+			"text": "var:preset|color|contrast"
+		},
+		"typography": {
+			"fontFamily": "var:preset|font-family|hanken-grotesk",
+			"lineHeight": "1.65"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var:preset|font-family|lora",
+					"fontWeight": "600",
+					"letterSpacing": "-0.01em"
+				}
+			},
+			"link": {
+				"color": { "text": "var:preset|color|accent-3" },
+				":hover": { "color": { "text": "var:preset|color|contrast" } }
+			}
+		},
+		"blocks": {
+			"core/site-title": {
+				"typography": { "fontFamily": "var:preset|font-family|lora", "fontWeight": "600" }
+			},
+			"core/code": {
+				"color": { "background": "var:preset|color|night", "text": "#e4e9e2" },
+				"typography": { "fontFamily": "var:preset|font-family|jetbrains-mono", "fontSize": "0.85rem", "lineHeight": "1.6" },
+				"spacing": { "padding": { "top": "1.1rem", "right": "1.25rem", "bottom": "1.1rem", "left": "1.25rem" } },
+				"border": { "radius": "8px" }
+			},
+			"core/quote": {
+				"border": { "left": { "color": "var:preset|color|accent-1", "width": "3px" } }
+			}
+		},
+		"css": ":where(p, li, td) code { font-family: var(--wp--preset--font-family--jetbrains-mono); font-size: 0.88em; background: var(--wp--preset--color--accent-2); padding: 0.1em 0.35em; border-radius: 4px; } .wp-block-code { overflow-x: auto; } .lab-hero p { color: var(--wp--preset--color--accent-4); font-size: 1.15rem; max-width: 38rem; margin-left: 0; } .lab-footer { border-top: 1px solid var(--wp--preset--color--accent-6); padding-block: 3rem 2.5rem; margin-block-start: 0; } .lab-footer .wp-block-site-title { font-size: 1.35rem; margin: 0; } .lab-footer .wp-block-site-tagline { color: var(--wp--preset--color--accent-4); font-size: 0.95rem; margin-top: 0.3rem; } .lab-footer .lab-credit { font-size: 0.8rem; color: var(--wp--preset--color--accent-4); margin-top: 2rem; } .note-list { list-style: none; padding: 0; } .note-list > li { padding-block: 1.75rem; border-top: 1px solid var(--wp--preset--color--accent-6); } .note-meta { gap: 0.9rem; font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--wp--preset--color--accent-3); } .note-meta a { text-decoration: none; } .note-list .wp-block-post-title { margin-block: 0.4rem 0.5rem; } .note-list .wp-block-post-title a { text-decoration: none; color: inherit; } .note-list .wp-block-post-title a:hover { color: var(--wp--preset--color--accent-3); } .note-list .wp-block-post-excerpt { color: var(--wp--preset--color--accent-4); }"
+	}
+}

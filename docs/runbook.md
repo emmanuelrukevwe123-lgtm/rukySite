@@ -24,6 +24,7 @@ git push to main
 | [`infra/deploy.sh`](../infra/deploy.sh) | Builds and deploys from your own machine |
 | [`infra/dns/setup-dns.sh`](../infra/dns/setup-dns.sh) | Sets up BIND as the DNS server for a delegated subdomain |
 | [`.github/dependabot.yml`](../.github/dependabot.yml) | Weekly dependency update pull requests |
+| [`infra/ops/setup-ops.sh`](../infra/ops/setup-ops.sh) | Installs the daily health report and nightly backups on any of the servers |
 
 ## First-time setup
 
@@ -130,10 +131,88 @@ Edit [`infra/caddy/Caddyfile`](../infra/caddy/Caddyfile), copy `infra/` to the s
 3. Update `DEPLOY_KNOWN_HOSTS`, because a new instance has a new host key.
 4. Re-run the latest workflow on `main` to publish the site.
 
+## Health reports and backups
+
+Every server can run the same two jobs, from [`infra/ops/`](../infra/ops/):
+
+| Job | When (server time) | What it does |
+| --- | --- | --- |
+| `ops-backup` | 03:00 | Backs up the WordPress database, `wp-content`, `wp-config.php` and the folders in `BACKUP_PATHS`; keeps 3 days on the server and 30 days in Oracle Object Storage |
+| automatic reboot | 04:00 | Only if a security update needs one |
+| `ops-health` | 07:00 | Checks disk, memory, services, updates, SSH and fail2ban, site status and certificates, WordPress updates, checksums and admins, and the last backup; sends a summary to your phone |
+
+### Set up the alerts and the bucket (once)
+
+1. **Alerts:** install the ntfy app and subscribe to a long random topic name, for example `ruky-ops-` followed by 16 random characters. The URL is `https://ntfy.sh/<topic>`. A Discord webhook URL works too.
+2. **Bucket:** in the Oracle console, go to **Storage → Buckets** and create a private bucket named `server-backups`. Note the **namespace** shown in the bucket details.
+3. **Keys:** go to **Profile → Customer secret keys → Generate secret key**. Copy the secret straight away, because it is shown only once. The access key is listed afterwards.
+4. Optional: at healthchecks.io, create two checks, `<host> health` (period 1 day) and `<host> backup` (period 1 day). Each one emails you if its ping stops arriving, which also catches a server that is down.
+
+### Install on a server
+
+```bash
+scp -r infra/ops ubuntu@<server ip>:~/
+ssh ubuntu@<server ip>
+sudo ~/ops/setup-ops.sh
+sudo nano /etc/ops/ops.conf      # the comments say what each setting is
+sudo ops-backup                  # first backup; it should end with "done (bucket:...)"
+sudo ops-health --no-notify      # read the report
+sudo ops-health                  # the summary should arrive on your phone
+```
+
+Settings per server:
+
+| Setting | Main site VM | WordPress VMs |
+| --- | --- | --- |
+| `WATCH_SERVICES` | `caddy fail2ban postfix dovecot named` | `apache2 mariadb fail2ban` |
+| `SITES` | `manuelruky.dev mail.lab.manuelruky.dev:993` | `wp.manuelruky.dev` or `ec2.manuelruky.dev` |
+| `WP_PATH` | (empty) | `/var/www/wordpress` |
+| `BACKUP_PATHS` | `/etc/caddy /etc/bind /etc/postfix /etc/dovecot /home/<mail user>/Maildir` | `/etc/apache2/sites-available` |
+| `MAIL_TO` | `<you>@lab.manuelruky.dev` works here (local delivery) | (empty unless outgoing mail is set up) |
+
+The site itself is not backed up, because every release can be rebuilt from git.
+
+### Day to day
+
+```bash
+sudo cat /var/log/ops/health-$(date +%F).txt   # today's full report
+systemctl list-timers 'ops-*'                  # next runs
+sudo journalctl -u ops-backup -n 50            # last backup's output
+sudo ls /var/backups/ops/                      # local copies
+```
+
+Update WordPress after reading the report (the backup from 03:00 is the safety net):
+
+```bash
+cd /var/www/wordpress
+sudo -u www-data wp core update && sudo -u www-data wp core update-db
+sudo -u www-data wp plugin update --all
+sudo -u www-data wp theme update --all
+```
+
+If the report warns about a new administrator you did add, record the current list:
+`sudo -u www-data wp --path=/var/www/wordpress user list --role=administrator --field=user_login | sort | sudo tee /var/lib/ops/wp-admins`
+
+### Restore from a backup
+
+1. Pick a copy: `sudo ls /var/backups/ops/`. If the server is gone, list the bucket in the Oracle console and download the folder for that host and time, or use `rclone` with the same settings as `ops-backup`.
+2. Check it is intact: `cd <copy> && sha256sum -c SHA256SUMS`.
+3. Files: `sudo tar -C / -xzf files.tar.gz` puts everything back where it was. To look first, run `tar -tzf files.tar.gz`. To restore a single path, add it at the end of the command without the leading `/`.
+4. WordPress database:
+   ```bash
+   gunzip -c wordpress-db.sql.gz > /tmp/restore.sql
+   sudo -u www-data wp --path=/var/www/wordpress db import /tmp/restore.sql
+   rm /tmp/restore.sql
+   ```
+5. On a new server, run `setup-wordpress.sh` first, then restore `wp-config.php`, `wp-content` and the database over it.
+
+Try a restore on a spare VM once, so you know it works before you need it.
+
 ## Where to look when something is wrong
 
 | Symptom | Check |
 | --- | --- |
+| Every port times out, but the console says Running | The firewall's connection table is full: `sudo journalctl -k \| grep 'table full'`. Reboot from the console to recover, then run `setup-ops.sh`, which raises `nf_conntrack_max` and shortens idle timeouts |
 | Site unreachable | Oracle security list has 80/443; `sudo iptables -L INPUT -n --line-numbers` shows them above the REJECT rule; `systemctl status caddy` |
 | Certificate errors | `journalctl -u caddy -n 100`: usually DNS not pointing here yet, or port 80 blocked |
 | Deploy fails at SSH | `DEPLOY_KNOWN_HOSTS` out of date (server rebuilt), or wrong key in `DEPLOY_SSH_KEY` |
@@ -141,3 +220,7 @@ Edit [`infra/caddy/Caddyfile`](../infra/caddy/Caddyfile), copy `infra/` to the s
 | Something on a page is missing | Browser console: the Content-Security-Policy in the Caddyfile may be blocking it |
 | Who has been knocking on SSH | `sudo fail2ban-client status sshd` |
 | Web traffic | `/var/log/caddy/access.log` (JSON) |
+| No health summary arrived | `systemctl list-timers 'ops-*'`; `sudo journalctl -u ops-health -n 50`; check `NOTIFY_URL` in `/etc/ops/ops.conf` |
+| Backup failed | `sudo journalctl -u ops-backup -n 50`: usually the bucket keys, endpoint or region in `/etc/ops/ops.conf` |
+| Report says a site is unreachable but it loads for you | The server may not reach its own public address; check from outside before changing anything |
+
