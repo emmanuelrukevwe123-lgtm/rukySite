@@ -309,5 +309,6 @@ export const navLinks = [
   { section: "work", label: "Work", href: "/#work" },
   { section: "moments", label: "Moments", href: "/#moments" },
   { section: "journal", label: "Blog", href: "/blog/" },
+  { section: "news", label: "News", href: "/news/" },
   { section: "contact", label: "Contact", href: "/#contact" },
 ] as const;

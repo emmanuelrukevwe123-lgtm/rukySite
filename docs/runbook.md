@@ -25,6 +25,7 @@ git push to main
 | [`infra/dns/setup-dns.sh`](../infra/dns/setup-dns.sh) | Sets up BIND as the DNS server for a delegated subdomain |
 | [`.github/dependabot.yml`](../.github/dependabot.yml) | Weekly dependency update pull requests |
 | [`infra/ops/setup-ops.sh`](../infra/ops/setup-ops.sh) | Installs the daily health report and nightly backups on any of the servers |
+| [`infra/news/setup-news.sh`](../infra/news/setup-news.sh) | Installs the hourly job behind the Tech news page (see [tech-news.md](tech-news.md)) |
 
 ## First-time setup
 

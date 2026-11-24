@@ -10,7 +10,7 @@ export function Nav() {
   const [active, setActive] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
-  const onBlog = usePathname().startsWith("/blog");
+  const pathname = usePathname();
 
   // Mark the section currently in the middle of the screen.
   useEffect(() => {
@@ -50,7 +50,12 @@ export function Nav() {
     <Link
       key={l.section}
       href={l.href}
-      aria-current={(onBlog ? l.section === "journal" : active === l.section) ? "true" : undefined}
+      aria-current={
+        // Page links (Blog, News) are current anywhere under their path; section links only on the homepage.
+        (l.href.startsWith("/#") ? pathname === "/" && active === l.section : pathname.startsWith(l.href.replace(/\/$/, "")))
+          ? "true"
+          : undefined
+      }
       onClick={() => setMenuOpen(false)}
     >
       {l.label}
