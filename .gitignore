@@ -31,3 +31,6 @@ Thumbs.db
 
 # Assignment screenshots (personal, not part of the site)
 Assignment/
+
+# Private session notes (server addresses, SSH commands)
+SESSION-NOTES.md
