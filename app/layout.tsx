@@ -3,6 +3,7 @@ import { Hanken_Grotesk, Lora } from "next/font/google";
 import { Footer } from "@/components/Contact";
 import { Nav } from "@/components/Nav";
 import { site } from "@/lib/content";
+import { jsonLd, siteGraph } from "@/lib/seo";
 import { themeInitScript } from "@/lib/theme";
 import "./globals.css";
 
@@ -16,13 +17,18 @@ export const metadata: Metadata = {
   title: site.title,
   description: site.description,
   alternates: { canonical: "/" },
+  applicationName: site.brand,
+  authors: [{ name: site.fullName, url: site.url }],
+  creator: site.fullName,
   openGraph: {
     type: "website",
-    siteName: site.name,
+    siteName: site.brand,
     title: site.title,
     description: site.description,
     url: "/",
   },
+  // Large preview card when a link is shared on X and similar sites.
+  twitter: { card: "summary_large_image", title: site.title, description: site.description },
 };
 
 export const viewport: Viewport = {
@@ -41,6 +47,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
       </head>
       <body>
+        {/* Who this site belongs to, for search engines (see lib/seo.ts). */}
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: jsonLd(siteGraph) }} />
         <Nav />
         {children}
         <Footer />

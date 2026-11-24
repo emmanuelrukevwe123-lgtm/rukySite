@@ -26,8 +26,10 @@ export const site = {
   /** Full name, used in the intro and page title. */
   fullName: "Emmanuel Nwabuokei",
   title: "Emmanuel Nwabuokei — Cybersecurity, cloud and DevSecOps",
+  /** The brand as search engines and link previews should read it: a plain hyphen, unlike `name`. */
+  brand: "Manuel-Ruky",
   description:
-    "Emmanuel Nwabuokei (Manuel‑Ruky) builds cloud infrastructure and pipelines with security in from the first commit. Projects, labs and write-ups.",
+    "Emmanuel Nwabuokei (Manuel-Ruky) builds cloud infrastructure and pipelines with security in from the first commit. Projects, labs and write-ups.",
   email: "emmanuel.rukevwe123@gmail.com",
   year: 2026,
   /** The site's public address, with no trailing slash. Used for link previews and the sitemap. */
