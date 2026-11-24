@@ -38,7 +38,14 @@ export function Slot({ label, photo, sizes = "50vw", onOpen }: SlotProps) {
       })}
     >
       {filled && photo?.src && (
-        <Image src={photo.src} alt={photo.alt ?? ""} fill sizes={sizes} onError={() => setFailed(true)} />
+        <Image
+          src={photo.src}
+          alt={photo.alt ?? ""}
+          fill
+          sizes={sizes}
+          style={photo.focus ? { objectPosition: photo.focus } : undefined}
+          onError={() => setFailed(true)}
+        />
       )}
     </div>
   );

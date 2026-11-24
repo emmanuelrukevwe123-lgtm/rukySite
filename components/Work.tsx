@@ -65,7 +65,7 @@ export function Work() {
         <div className="section-head work-head">
           <div className="arrow-host">
             <h2 className="h2-xl">Selected projects</h2>
-            <p className="work-intro">A handful of things I’ve built recently — each one made slowly, with care.</p>
+            <p className="work-intro">A handful of things I’ve built recently.</p>
             <HandArrow shape="long" className="section-arrow arrow-xl" />
           </div>
           <div className="pager">
@@ -89,9 +89,18 @@ export function Work() {
               style={{ "--grad": p.gradient, "--on": p.onColor } as React.CSSProperties}
             >
               <div className="project-art">
-                <div className="project-shot">
-                  <Slot label="Project screenshot" photo={p.screenshot} sizes="(max-width: 640px) 80vw, 33vw" />
-                </div>
+                {/* A project without a screenshot shows its plain colour card, not an empty frame. */}
+                {p.screenshot?.src && (
+                  <div className="project-shot">
+                    <Slot label="Project screenshot" photo={p.screenshot} sizes="(max-width: 640px) 80vw, 33vw" />
+                  </div>
+                )}
+                {/* Small badge beside a screenshot; the main artwork when there is none. */}
+                <span className={p.screenshot?.src ? "project-symbol" : "project-symbol is-large"} aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d={p.symbol} />
+                  </svg>
+                </span>
                 <span className="project-kind">{p.kind}</span>
                 <span className="project-year">{p.year}</span>
               </div>

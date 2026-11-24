@@ -10,7 +10,7 @@ export function Nav() {
   const [active, setActive] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
-  const onBlog = usePathname().startsWith("/blog");
+  const pathname = usePathname();
 
   // Mark the section currently in the middle of the screen.
   useEffect(() => {
@@ -50,7 +50,12 @@ export function Nav() {
     <Link
       key={l.section}
       href={l.href}
-      aria-current={(onBlog ? l.section === "journal" : active === l.section) ? "true" : undefined}
+      aria-current={
+        // Page links (Blog, News) are current anywhere under their path; section links only on the homepage.
+        (l.href.startsWith("/#") ? pathname === "/" && active === l.section : pathname.startsWith(l.href.replace(/\/$/, "")))
+          ? "true"
+          : undefined
+      }
       onClick={() => setMenuOpen(false)}
     >
       {l.label}
@@ -74,9 +79,18 @@ export function Nav() {
             className="menu-btn"
             aria-expanded={menuOpen}
             aria-controls="mobile-menu"
+            aria-label={menuOpen ? "Close menu" : "Menu"}
+            title={menuOpen ? "Close menu" : "Menu"}
             onClick={() => setMenuOpen((o) => !o)}
           >
-            {menuOpen ? "Close" : "Menu"}
+            {/* Filled, rounded bars to match the other icons (Flaticon UIcons style). */}
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              {menuOpen ? (
+                <path d="M18.71 5.29a1 1 0 0 0-1.42 0L12 10.59 6.71 5.29a1 1 0 0 0-1.42 1.42L10.59 12l-5.3 5.29a1 1 0 1 0 1.42 1.42L12 13.41l5.29 5.3a1 1 0 0 0 1.42-1.42L13.41 12l5.3-5.29a1 1 0 0 0 0-1.42Z" />
+              ) : (
+                <path d="M3 5h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 6h18a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Zm0 6h12a1 1 0 0 1 0 2H3a1 1 0 0 1 0-2Z" />
+              )}
+            </svg>
           </button>
         </div>
       </div>

@@ -1,0 +1,67 @@
+# Settings for the ops scripts (health report and backups).
+# setup-ops.sh copies this to /etc/ops/ops.conf, readable by root only.
+# Edit it with:  sudo nano /etc/ops/ops.conf
+# Then test with: sudo ops-health --no-notify   and   sudo ops-backup
+
+# Name used in reports and in the backup bucket. Defaults to the hostname.
+HOST_LABEL=""
+
+# ---------------------------------------------------------------- Alerts
+# Where the daily summary and backup failures go. Either:
+#   an ntfy topic:     https://ntfy.sh/<long random name>   (install the ntfy
+#                      phone app and subscribe to the same name; anyone who
+#                      guesses the name can read it, so make it long)
+#   a Discord webhook: https://discord.com/api/webhooks/...
+NOTIFY_URL=""
+
+# Optional: also email the full report. Needs working outgoing mail on this
+# server (Postfix plus infra/mail/setup-relay.sh); leave empty otherwise.
+MAIL_TO=""
+
+# Optional dead-man's switches (healthchecks.io, free). Create one check per
+# job and paste its ping URL. If a ping does not arrive on time, it emails you,
+# which also catches "the whole server is down".
+HEALTH_PING_URL=""
+BACKUP_PING_URL=""
+
+# ---------------------------------------------------------------- Health checks
+DISK_WARN_PCT=80
+MEM_WARN_PCT=90
+CERT_WARN_DAYS=14
+
+# Services that must be running, separated by spaces.
+#   main site VM:  "caddy fail2ban postfix dovecot named"
+#   WordPress VM:  "apache2 mariadb fail2ban"
+WATCH_SERVICES="fail2ban"
+
+# Addresses to check from the outside: HTTP status and certificate expiry.
+# host        checks https://host/ and its certificate
+# host:port   checks only the certificate (e.g. mail.lab.example.dev:993)
+SITES=""
+
+# WordPress folder, if this server runs WordPress. Leave empty otherwise.
+WP_PATH=""
+
+# ---------------------------------------------------------------- Backups
+# Folders and files to back up, separated by spaces. WordPress (database,
+# wp-content, wp-config.php) is added automatically when WP_PATH is set.
+#   main site VM:  "/etc/caddy /etc/bind /etc/postfix /etc/dovecot /home/emmanuel/Maildir"
+#   WordPress VM:  "/etc/apache2/sites-available"
+BACKUP_PATHS="/etc/ssh/sshd_config.d /etc/fail2ban/jail.local"
+
+# Copies kept on this server (days). Local copies do not survive losing the
+# server, so set up the bucket below as well.
+BACKUP_DIR=/var/backups/ops
+LOCAL_KEEP_DAYS=3
+
+# Oracle Object Storage, through its S3-compatible API (20 GB are Always Free).
+# Leave BACKUP_BUCKET empty to keep backups on this server only.
+#   endpoint:   https://<namespace>.compat.objectstorage.<region>.oraclecloud.com
+#               (namespace: Object Storage → bucket details; region e.g. ca-toronto-1)
+#   keys:       Profile → Customer secret keys → Generate secret key
+BACKUP_BUCKET=""
+S3_ENDPOINT=""
+S3_REGION=""
+S3_ACCESS_KEY=""
+S3_SECRET_KEY=""
+REMOTE_KEEP_DAYS=30

@@ -2,6 +2,9 @@
 Retro 2013 Portfolio Page-handoff/
 *.zip
 
+# Original photos (full size, with location data). The web copies live in public/images/.
+Pictures/
+
 # Windows download metadata created under WSL
 *:Zone.Identifier
 *:SmartScreen
@@ -25,3 +28,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 .vscode/
+
+# Assignment screenshots (personal, not part of the site)
+Assignment/
+
+# Private session notes (server addresses, SSH commands)
+SESSION-NOTES.md

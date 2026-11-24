@@ -5,6 +5,7 @@ import { Mermaid } from "@/components/Mermaid";
 import { ReadingProgress } from "@/components/ReadingProgress";
 import { site } from "@/lib/content";
 import { getAllPosts, getPost } from "@/lib/posts";
+import { jsonLd, personId } from "@/lib/seo";
 
 // Only the posts in content/posts exist; any other address is a 404.
 export const dynamicParams = false;
@@ -20,7 +21,17 @@ export async function generateMetadata({ params }: PageProps<"/blog/[slug]">): P
   return {
     title: `${post.title} — ${site.fullName}`,
     description: post.summary,
-    openGraph: { type: "article", title: post.title, description: post.summary, publishedTime: post.dateTime },
+    alternates: { canonical: `/blog/${post.slug}/` },
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.summary,
+      publishedTime: post.dateTime,
+      authors: [site.fullName],
+      // Setting openGraph here replaces the inherited share image, so name one again.
+      images: [post.cover ?? "/opengraph-image.png"],
+      url: `/blog/${post.slug}/`,
+    },
   };
 }
 
@@ -41,6 +52,24 @@ export default async function PostPage({ params }: PageProps<"/blog/[slug]">) {
 
   return (
     <main className="article-page">
+      {/* Marks this page as a blog post by the site's owner (see lib/seo.ts). */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: jsonLd({
+            "@context": "https://schema.org",
+            "@type": "BlogPosting",
+            headline: post.title,
+            description: post.summary,
+            datePublished: post.dateTime,
+            url: `${site.url}/blog/${post.slug}/`,
+            mainEntityOfPage: `${site.url}/blog/${post.slug}/`,
+            ...(post.cover && { image: `${site.url}${post.cover}` }),
+            author: { "@id": personId, name: site.fullName, url: `${site.url}/` },
+            publisher: { "@id": personId },
+          }),
+        }}
+      />
       <ReadingProgress />
       <article className="article">
         <header className="article-head">
