@@ -85,7 +85,7 @@ systemd then locks the service down further:
 
 If a malicious feed ever found a bug in the fetcher, the worst it could do is write a bad headlines file.
 
-`systemd-analyze security news-fetch.service` scores how exposed a service is, from 0 (locked down) to 10. The first version scored **5.8 MEDIUM**; adding the last four rows above brought it to **1.1 OK**. For comparison, most services that ship with Ubuntu score between 6 and 9.6.
+`systemd-analyze security news-fetch.service` scores how exposed a service is, from 0 (locked down) to 10. The first version scored **5.8 MEDIUM**; adding the last four rows above brought it to **1.1 OK**. For comparison, 39 of the 53 other services on the main VM score between 9.4 and 9.6 (out of 10).
 
 ### Treating feed data as untrusted
 - **Size limit:** feeds over 5 MB are refused.
